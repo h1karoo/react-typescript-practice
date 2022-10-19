@@ -8,9 +8,11 @@ import styles from "./TodoItem.module.css";
 interface TodoItemProps {
     todo: Todo,
     checkTodo: (id: Todo['id']) => void,
+    deleteTodo: (id: Todo['id']) => void,
+    setTodoIdForEdit: (id: Todo['id']) => void,
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, checkTodo }) => {
+export const TodoItem: React.FC<TodoItemProps> = ({ todo, checkTodo, deleteTodo, setTodoIdForEdit}) => {
     return <div className={styles.todo_item_container}>
         <div>
             <div aria-hidden
@@ -28,10 +30,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, checkTodo }) => {
             </div>
         </div>
         <div className={styles.todo_item_button_container}>
-            <Button color='orange'>
+            <Button color='purple' onClick = {() => setTodoIdForEdit(todo.id)}>
                 Edit
             </Button>
-            <Button color='red'>
+            <Button color='red' onClick = {() => deleteTodo(todo.id)}>
                 Delete
             </Button>
         </div>

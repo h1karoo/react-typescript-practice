@@ -9,12 +9,22 @@ const DEFAULT_TODO = {
   description: ''
 }
 
-interface TodoPanelProps {
+interface AddTodoPanelProps {
+  mode: 'add';
   addTodo : ({name, description}: Omit<Todo, 'checked' | 'id'>) => void;
 }
+interface EditTodoPanelProps {
+  mode: 'edit';
+  editTodo: Omit<Todo, 'id' | 'checked'>;
+  changeTodo : ({name, description}: Omit<Todo, 'checked' | 'id'>) => void;
+}
 
-export const TodoPanel: React.FC<TodoPanelProps> = ({addTodo}) => {
-    const [todo, setTodo] = React.useState(DEFAULT_TODO);
+type TodoPanelProps = AddTodoPanelProps | EditTodoPanelProps;
+
+export const TodoPanel: React.FC<TodoPanelProps> = (props) => {
+    const isEdit = props.mode === 'edit';
+
+    const [todo, setTodo] = React.useState(isEdit ? props.editTodo: DEFAULT_TODO);
     console.log('@todo', todo)
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +33,12 @@ export const TodoPanel: React.FC<TodoPanelProps> = ({addTodo}) => {
     };
 
   const onClick = () => {
-    addTodo({ name: todo.name, description: todo.description })
+    const todoItem = { name: todo.name, description: todo.description }
+    if (isEdit) {
+      return props.changeTodo(todoItem)
+    }
+
+    props.addTodo(todoItem)
     setTodo(DEFAULT_TODO)
   }
 
@@ -49,11 +64,18 @@ export const TodoPanel: React.FC<TodoPanelProps> = ({addTodo}) => {
       </div>
     </div>
         <div className={styles.button_container}>
+        {!isEdit && (          
           <Button
-           color = 'blue' 
+           color = 'blue'
            onClick = {onClick}>
             Add
-          </Button>
+          </Button>)}
+          {isEdit && (          
+          <Button
+           color = 'purple' 
+           onClick = {onClick}>
+            Edit
+          </Button>)}
         </div>
     </div>
 

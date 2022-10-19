@@ -20,6 +20,11 @@ const DEFAULT_TODO_LIST = [
 
 export const App = () => {
   const [todos, setTodos] = React.useState(DEFAULT_TODO_LIST)
+  const [todoIdForEdit, setTodoIdForEdit] = React.useState<Todo['id'] | null>(null);
+
+  const selectTodoIdForEdit = (id:Todo['id']) => {
+    setTodoIdForEdit(id)
+  }
 
   const addTodo = ({name, description}: Omit<Todo, 'checked' | 'id'>) => {
     setTodos ([...todos, {id: todos[todos.length - 1].id + 1, description, name, checked: false}])
@@ -35,12 +40,34 @@ export const App = () => {
     }))
   }
 
+  const deleteTodo = (id: Todo['id']) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const changeTodo = ({name, description}: Omit<Todo, 'checked' | 'id'>) => {
+    setTodos (
+      todos.map(todo => {
+      if (todo.id === todoIdForEdit) {
+        return {...todo, name, description}
+      }
+
+      return todo;
+    }));
+    setTodoIdForEdit(null);
+  }
+
   return (
     <div className={styles.app_container}>
       <div className={styles.container}>
         <Header todoCount={todos.length}/>
-        <TodoPanel addTodo = {addTodo}/>
-        <TodoList todos = {todos} checkTodo = {checkTodo}/>
+        <TodoPanel mode = 'add' addTodo = {addTodo}/>
+        <TodoList todos = {todos}
+          todoIdForEdit = {todoIdForEdit}
+          checkTodo = {checkTodo}
+          deleteTodo = {deleteTodo}
+          setTodoIdForEdit = {setTodoIdForEdit}
+          changeTodo = {changeTodo}
+           />
         </div>
     </div>
   );

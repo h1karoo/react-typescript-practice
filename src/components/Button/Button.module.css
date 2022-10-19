@@ -14,13 +14,13 @@
     background-color: rgba(210, 25, 25, 0.05);
   }
   
-  .button_orange {
-    border: 1px solid rgba(210, 102, 25, 0.5);
-    color: #d27c19;
+  .button_purple {
+    border: 1px solid rgba(118, 25, 210, 0.5);
+    color: #a419d283;
   }
   
-  .button_orange:hover {
-    background-color: rgba(210, 84, 25, 0.05);
+  .button_purple:hover {
+    background-color: rgba(145, 25, 210, 0.162);
   }
   
   .button_blue {
