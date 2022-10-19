@@ -1,13 +1,19 @@
 import React from "react";
 
+import { Button } from '../Button/Button';
+
 import styles from './TodoPanel.module.css'
 
 const DEFAULT_TODO = {
-    name: '',
-    description: ''
+  name: '',
+  description: ''
 }
 
-export const TodoPanel = () => {
+interface TodoPanelProps {
+  addTodo : ({name, description}: Omit<Todo, 'checked' | 'id'>) => void;
+}
+
+export const TodoPanel: React.FC<TodoPanelProps> = ({addTodo}) => {
     const [todo, setTodo] = React.useState(DEFAULT_TODO);
     console.log('@todo', todo)
 
@@ -16,6 +22,10 @@ export const TodoPanel = () => {
         setTodo({...todo, [name]: value});
     };
 
+  const onClick = () => {
+    addTodo({ name: todo.name, description: todo.description })
+    setTodo(DEFAULT_TODO)
+  }
 
     return <div className={styles.todo_panel_container}>
     <div className={styles.fields_container}>
@@ -39,7 +49,11 @@ export const TodoPanel = () => {
       </div>
     </div>
         <div className={styles.button_container}>
-            <button>Add</button>
+          <Button
+           color = 'blue' 
+           onClick = {onClick}>
+            Add
+          </Button>
         </div>
     </div>
 
